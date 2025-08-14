@@ -1,0 +1,27 @@
+services:
+  job_app_postgresql:
+    container_name: job_app_postgresql
+    image: postgres:17.4
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: jobapp
+    volumes:
+      - data:/var/lib/postgresql/data
+    ports:
+      - "5430:5432"
+
+  redis:
+    image: redis:8.0.3
+    ports:
+      - "6379:6379"
+
+  mail-dev:
+    container_name: mail-dev-sf
+    image: maildev/maildev
+    ports:
+      - 1080:1080
+      - 1025:1025
+
+volumes:
+  data:
