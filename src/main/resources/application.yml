@@ -1,0 +1,55 @@
+spring:
+  application:
+   name: job-app
+
+  datasource:
+    url: jdbc:postgresql://localhost:5430/jobapp
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: admin
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      maximum-pool-size: 8
+      minimum-idle: 2
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+
+  mail:
+    password: job
+    username: job
+    host: localhost
+    port: 1025
+    properties:
+      mail:
+        smtp:
+          trust: "*"
+          auth: true
+          starttls: enable
+          connection timeout: 5000
+          timeout: 3000
+          write timeout: 5000
+
+logging:
+  level:
+    root: info
+    com.job: debug
+
+application:
+  jwt:
+    secret-key-string: ${JWT_SECRET_KEY_STRING:abcfgsnwiajdnasjdnasdasndjnadnwsadkasdkasndiekafnasnd}
+    access-token-expiration: ${ACCESS_TOKEN_EXPIRATION:1500000}
+    refresh-token-expiration: ${REFRESH_TOKEN_EXPIRATION:86400000}
+
+server:
+  servlet:
+    context-path: /api/
