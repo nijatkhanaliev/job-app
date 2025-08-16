@@ -1,6 +1,9 @@
 spring:
   application:
-   name: job-app
+    name: job-app
+
+  config:
+    import: optional:classpath:application-secrets.yml
 
   datasource:
     url: jdbc:postgresql://localhost:5430/jobapp
@@ -14,6 +17,7 @@ spring:
       connection-timeout: 30000
       idle-timeout: 600000
       max-lifetime: 1800000
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -23,10 +27,9 @@ spring:
       hibernate:
         format_sql: true
 
-
   mail:
-    password: job
     username: job
+    password: job
     host: localhost
     port: 1025
     properties:
@@ -35,9 +38,9 @@ spring:
           trust: "*"
           auth: true
           starttls: enable
-          connection timeout: 5000
+          connection-timeout: 5000
           timeout: 3000
-          write timeout: 5000
+          write-timeout: 5000
 
 logging:
   level:
@@ -52,4 +55,30 @@ application:
 
 server:
   servlet:
-    context-path: /api/
+    context-path: /api
+  tomcat:
+    max-swallow-size: 50MB
+
+spring.servlet:
+  multipart:
+    enabled: true
+    max-file-size: 50MB
+    max-request-size: 50MB
+
+springdoc:
+  api-docs:
+    enabled: true
+
+  swagger-ui:
+    path: /swagger-ui.html
+    display-request-duration: true
+    doc-expansion: list
+    operations-sorter: alpha
+    tags-sorter: alpha
+
+  packages-to-scan: com.job.controller
+  security-schemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearer-format: JWT

@@ -24,7 +24,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .orElseThrow(()-> new NotFoundException(
                         String.format(NOT_FOUND_MESSAGE, "User"), NOT_FOUND)
                 );
-
         return new UserDetailsImpl(user);
     }
 }
