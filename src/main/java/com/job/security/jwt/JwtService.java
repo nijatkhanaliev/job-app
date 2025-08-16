@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
 import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
@@ -28,11 +27,12 @@ public class JwtService {
     @Value("${application.jwt.secret-key-string}")
     private String secretkeyString;
 
-    @Value("${application.jwt.refresh-token-expiration}")
+    @Value("${application.jwt.access-token-expiration}")
     private Long accessExpirationMs;
 
-    @Value("${application.jwt.access-token-expiration}")
+    @Value("${application.jwt.refresh-token-expiration}")
     private Long refreshExpirationMs;
+
 
     private SecretKey secretKey;
 
@@ -50,7 +50,7 @@ public class JwtService {
         claims.put("type", "access");
 
         String accessToken = buildToken(user.getEmail(), claims, accessExpirationMs);
-        redisTokenService.save(user.getEmail() + ":access", user.getEmail(), accessExpirationMs);
+        redisTokenService.save(user.getEmail() + ":access", accessToken, accessExpirationMs);
 
         return accessToken;
     }
@@ -61,10 +61,10 @@ public class JwtService {
         claims.put("role", user.getUserRole());
         claims.put("type", "refresh");
 
-        String accessToken = buildToken(user.getEmail(), claims, refreshExpirationMs);
-        redisTokenService.save(user.getEmail() + ":refresh", user.getEmail(), refreshExpirationMs);
+        String refreshToken = buildToken(user.getEmail(), claims, refreshExpirationMs);
+        redisTokenService.save(user.getEmail() + ":refresh", refreshToken, refreshExpirationMs);
 
-        return accessToken;
+        return refreshToken;
     }
 
     public String extractUserEmail(String token) {
