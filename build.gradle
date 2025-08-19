@@ -25,6 +25,9 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.apache.tika:tika-core:2.9.0'
+    implementation 'org.apache.tika:tika-parsers-standard-package:2.9.0'
+    implementation 'com.theokanning.openai-gpt3-java:client:0.12.0' // stable Java SDK
     implementation 'com.github.imagekit-developer:imagekit-java:2.0.0'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
     implementation 'org.springframework.boot:spring-boot-starter-web'
