@@ -26,6 +26,6 @@ public class CVExperience extends BaseEntity {
     @Column(nullable = false)
     private String role;
     @Column(nullable = true)
-    private String years; // e.g. "2022-2024"
+    private String years; // example: "2022-2024"
 
 }

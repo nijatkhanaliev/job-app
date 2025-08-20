@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
@@ -158,5 +159,56 @@ public class CVServiceImpl {
                 .uploadedAt(savedCV.getCreatedAt())
                 .extractedData(extractedData)
                 .build();
+
     }
+
+    @Transactional(readOnly = true)
+    public List<CVResponse> getUserCVs(String email) {
+        logger.info("Fetching CVs for user with email: {}", email);
+
+        // Get user by email
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+
+        // Get user's CVs
+        List<CV> userCVs = cvRepository.findByUserId(user.getId());
+
+        if (userCVs.isEmpty()) {
+            logger.warn("No CVs found for user: {}", email);
+            return List.of();
+        }
+
+        List<CVResponse> responseList = new ArrayList<>();
+
+        for (CV cv : userCVs) {
+            List<CVSkill> skills = cvSkillRepository.findByCvId(cv.getId());
+            List<CVExperience> experiences = cvExperienceRepository.findByCvId(cv.getId());
+
+            ExtractedData extractedData = ExtractedData.builder()
+                    .skills(skills.stream().map(CVSkill::getSkillName).toList())
+                    .experience(experiences.stream()
+                            .map(exp -> Experience.builder()
+                                    .company(exp.getCompany())
+                                    .role(exp.getRole())
+                                    .years(exp.getYears())
+                                    .build())
+                            .toList())
+                    .build();
+
+            CVResponse response = CVResponse.builder()
+                    .cvId(cv.getId())
+                    .userId(user.getId())
+                    .url(cv.getUrl())
+                    .status(1)
+                    .uploadedAt(cv.getCreatedAt())
+                    .extractedData(extractedData)
+                    .build();
+
+            responseList.add(response);
+        }
+
+        logger.info("Fetched {} CV(s) for user: {}", responseList.size(), email);
+        return responseList;
+    }
+
 }

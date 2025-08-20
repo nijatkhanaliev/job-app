@@ -18,7 +18,7 @@ import lombok.experimental.SuperBuilder;
 public class CVSkill extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="cv_id",nullable = false)
+    @JoinColumn(name = "cv_id", nullable = false)
     private CV cv;
 
     @Column(nullable = false)

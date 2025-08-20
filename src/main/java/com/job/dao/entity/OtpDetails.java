@@ -30,4 +30,5 @@ public class OtpDetails {
     private String hashedPassword;
     private String code;
     private LocalDateTime expiryDate;
+
 }
